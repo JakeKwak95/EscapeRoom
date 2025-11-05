@@ -4,17 +4,18 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject menuObject;
 
-    private void Awake()
+    private void OnEnable()
     {
         InputManager.OnEscapeInput += InputManager_OnEscapeInput;
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         InputManager.OnEscapeInput -= InputManager_OnEscapeInput;
     }
+
     private void InputManager_OnEscapeInput()
     {
-        if(GameManager.Instance.CurrentGameState.state == GameState.Moving ||
+        if(GameManager.Instance.CurrentGameState.state == GameState.World ||
            GameManager.Instance.CurrentGameState.state == GameState.Paused)
             menuObject.SetActive(!menuObject.activeSelf);
     }

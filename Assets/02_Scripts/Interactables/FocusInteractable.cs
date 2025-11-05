@@ -1,9 +1,12 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FocusInteractable : InteractableBase
 {
+    [Header(" - Focus Interactable Settings - "), Space(10)]
     [SerializeField] CinemachineCamera focusCamera;
+    [SerializeField] UnityEvent afterZoom;
 
     public override void BeginInteract()
     {
@@ -16,12 +19,14 @@ public class FocusInteractable : InteractableBase
 
         GameManager.Instance.ChangeGameState(GameState.Focusing);
 
-        if(!focusCamera)
+        if (!focusCamera)
             focusCamera = GetComponentInChildren<CinemachineCamera>();
 
         focusCamera?.gameObject.SetActive(true);
 
         onInteract.Invoke();
+
+        Invoke(nameof(OnAfterZoom), GlobalData.CameraBlendTime);
     }
 
     public override void EndInteract()
@@ -29,16 +34,16 @@ public class FocusInteractable : InteractableBase
         base.EndInteract();
 
         focusCamera?.gameObject.SetActive(false);
-        Invoke(nameof(ToMovingState), GlobalData.CameraBlendTime);
+        Invoke(nameof(ToWorldState), GlobalData.CameraBlendTime);
     }
 
-    private void ToMovingState()
+    void OnAfterZoom()
     {
-        GameManager.Instance.ChangeGameState(GameState.Moving);
+        afterZoom?.Invoke();
     }
-}
 
-public abstract class QuizBase : MonoBehaviour
-{
-    public abstract void CheckAnswer();
+    private void ToWorldState()
+    {
+        GameManager.Instance.ChangeGameState(GameState.World);
+    }
 }

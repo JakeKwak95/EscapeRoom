@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     List<MonoBehaviour> managedBehaviours = new List<MonoBehaviour>(10);
     public StateBehaviourSet CurrentGameState { get; private set; }
 
+    public Action OnFocus;
+
     [Header(" - Debug - ")]
     [SerializeField, EnumButtons] GameState debugGameState;
 
@@ -75,10 +77,11 @@ public class GameManager : MonoBehaviour
         {
             case GameState.None:
                 break;
-            case GameState.Moving:
+            case GameState.World:
                 SetCursor(CursorLockMode.Locked);
                 break;
             case GameState.Focusing:
+                OnFocus?.Invoke();
                 SetCursor(CursorLockMode.None);
                 break;
             case GameState.Paused:
@@ -101,7 +104,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.None:
                 break;
-            case GameState.Moving:
+            case GameState.World:
                 ChangeGameState(GameState.Paused);
                 break;
             case GameState.Focusing:
@@ -110,7 +113,7 @@ public class GameManager : MonoBehaviour
                 InteractableBase.CurrentInteractable?.EndInteract();
                 break;
             case GameState.Paused:
-                ChangeGameState(GameState.Moving);
+                ChangeGameState(GameState.World);
                 break;
             default:
                 break;
@@ -122,7 +125,7 @@ public enum GameState
 {
     None = -1,
 
-    Moving,
+    World,
     Focusing,
     Paused,
 
@@ -134,6 +137,6 @@ public enum GameState
 [Serializable]
 public struct StateBehaviourSet
 {
-    public GameState state;
+   [EnumButtons] public GameState state;
     public MonoBehaviour[] enabledBehaviours;
 }
