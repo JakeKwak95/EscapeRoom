@@ -10,7 +10,7 @@ public abstract class InteractableBase : MonoBehaviour
 
     protected bool isInteractable = true;
 
-    public virtual void BeginInteract()
+    public virtual void BeginInteract(Transform interactor = null)
     {
         CurrentInteractable = this;
     }
