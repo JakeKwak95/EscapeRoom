@@ -8,6 +8,8 @@ public class FocusInteractable : InteractableBase
     [SerializeField] CinemachineCamera focusCamera;
     [SerializeField] UnityEvent afterZoom;
 
+
+
     public override void BeginInteract(Transform interactor = null)
     {
         if (!isInteractable) return;
