@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class RotateQuiz : QuizBase
 {
-    [SerializeField] int[] correctRotations;
+    [SerializeField] int[] correctRotateAmount;
     [SerializeField] Transform[] targets;
 
     [SerializeField] int maxRotation = 3;
@@ -11,6 +12,16 @@ public class RotateQuiz : QuizBase
     [SerializeField] float rotateTime = .5f;
 
     bool isRotating = false;
+
+    private void OnEnable()
+    {
+        onCorrect.AddListener(EndQuiz);
+    }
+
+    private void OnDisable()
+    {
+        onCorrect.RemoveAllListeners();
+    }
 
     public void Rotate(int index)
     {
@@ -41,15 +52,26 @@ public class RotateQuiz : QuizBase
     {
         for (int i = 0; i < targets.Length; i++)
         {
-            int currentRotation = Mathf.RoundToInt(targets[i].eulerAngles.y) % 360;
-            if (currentRotation != correctRotations[i])
+            int currentRotation = Mathf.RoundToInt(targets[i].localEulerAngles.y) % 360;
+
+            if (currentRotation != correctRotateAmount[i] * RotateAmount)
             {
-                Debug.Log("Wrong!");
                 return;
             }
         }
 
-        Debug.Log("Correct!");
         onCorrect?.Invoke();
     }
+
+    private void EndQuiz()
+    {
+        for (int i = 0; i < targets.Length; i++)
+        {
+            if (targets[i].TryGetComponent(out InteractableBase interactable))
+            {
+                interactable.enabled = false;
+            }
+        }
+    }
+
 }

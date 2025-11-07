@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     private void InputManager_OnMoveInput(Vector2 vector)
     {
         Vector3 velocity = Vector3.zero;
-        velocity += transform.forward * vector.y;
-        velocity += transform.right * vector.x;
+        velocity += rayOriginTransform.forward * vector.y;
+        velocity += rayOriginTransform.right * vector.x;
         velocity.y = 0;
         velocity.Normalize();
         velocity *= walkSpeed * Time.deltaTime;
