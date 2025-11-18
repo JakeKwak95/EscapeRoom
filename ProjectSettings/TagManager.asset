@@ -14,8 +14,8 @@ TagManager:
   - WorldInteractable
   - FocusInteractable
   - SocketPlace
-  - 
-  - 
+  - MirrorVisibleOnly
+  - MirrorNotVisible
   - 
   - 
   - 

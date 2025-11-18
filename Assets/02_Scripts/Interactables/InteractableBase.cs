@@ -22,5 +22,6 @@ public abstract class InteractableBase : MonoBehaviour
     protected virtual void EnableInteraction()
     {
         isInteractable = true;
+
     }
 }

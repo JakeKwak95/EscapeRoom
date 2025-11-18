@@ -20,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
         InputManager.OnLookInput -= InputManager_OnLookInput;
     }
 
+    public void Init(float walkSpeed)
+    {
+        this.walkSpeed = walkSpeed;
+    }
 
     private void InputManager_OnMoveInput(Vector2 vector)
     {
